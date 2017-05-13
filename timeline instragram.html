@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="path/to/instafeed.min.js"></script>
-	
 <meta charset="utf-8">
-<title>timeline instragram</title>
+<title>instragram</title>
 <meta content='width=device-width, initial-scale=1' name='viewport'>
 <link href='https://fonts.googleapis.com/css?family=Roboto:100,200,300,400italic,400,500,500italic,700,700italic,900' rel='stylesheet' type='text/css'/>
 <style>
@@ -31,11 +29,32 @@ h4{margin:2px 0 0;font-size:14px}
 </style>
 </head>
 <body>
-
+<h2>We're on Instagram</h2>
+<div class='instafeed' id='instafeed'></div>
 <div class="insta-config" id="insta-config" data-insta_client_id="dd406b0991a94edb98ed8a795676532e" data-insta_user_id="214246886" data-insta_access_token="214246886.dd406b0.b7b583b94dbe4808b0f526e37c3f3790" data-instagram="true" ></div>
+            
+<script type="text/javascript">
+    var loadButton = document.getElementById('load-more');
+    var feed = new Instafeed({
+        // every time we load more, run this function
+        after: function() {
+            // disable button if no more results to load
+            if (!this.hasNext()) {
+                loadButton.setAttribute('disabled', 'disabled');
+            }
+        },
+    });
 
+    // bind the load more button
+    loadButton.addEventListener('click', function() {
+        feed.next();
+    });
 
-</div>
+    // run our feed!
+    feed.run();
+</script>
+
+ </div>
 </div>
 </body>
 </html>
