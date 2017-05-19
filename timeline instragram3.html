@@ -1,0 +1,29 @@
+<?php
+function get_instagram($user_id=15203338,$count=6,$width=190,$height=190){
+
+    $url = 'https://api.instagram.com/v1/users/'.$user_id.'/media/recent/?access_token=13137.f59def8.1a759775695548999504c219ce7b2ecf&count='.$count;
+
+    // Also Perhaps you should cache the results as the instagram API is slow
+    $cache = './'.sha1($url).'.json';
+    if(file_exists($cache) && filemtime($cache) > time() - 60*60){
+        // If a cache file exists, and it is newer than 1 hour, use it
+        $jsonData = json_decode(file_get_contents($cache));
+    } else {
+        $jsonData = json_decode((file_get_contents($url)));
+        file_put_contents($cache,json_encode($jsonData));
+    }
+
+    $result = '<div id="instagram">'.PHP_EOL;
+    foreach ($jsonData->data as $key=>$value) {
+        $result .= "\t".'<a class="fancybox" data-fancybox-group="gallery" 
+                            title="'.htmlentities($value->caption->text).' '.htmlentities(date("F j, Y, g:i a", $value->caption->created_time)).'"
+                            style="padding:3px" href="'.$value->images->standard_resolution->url.'">
+                          <img src="'.$value->images->low_resolution->url.'" alt="'.$value->caption->text.'" width="'.$width.'" height="'.$height.'" />
+                          </a>'.PHP_EOL;
+    }
+    $result .= '</div>'.PHP_EOL;
+    return $result;
+}
+
+echo get_instagram();
+?>
